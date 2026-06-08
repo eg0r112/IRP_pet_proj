@@ -1,0 +1,216 @@
+:root {
+  --bg: #0f1419;
+  --panel: #1a2332;
+  --panel-2: #222d3d;
+  --border: #2f3f54;
+  --text: #e8eef7;
+  --muted: #8fa3bf;
+  --accent: #3d8bfd;
+  --accent-2: #22b8cf;
+  --danger: #ff6b6b;
+  --success: #51cf66;
+  --radius: 12px;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(61, 139, 253, 0.15), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(34, 184, 207, 0.12), transparent 30%),
+    var(--bg);
+  color: var(--text);
+}
+
+.hidden { display: none !important; }
+
+#app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.login-panel {
+  max-width: 420px;
+  margin: 10vh auto;
+  padding: 32px;
+}
+
+.brand { text-align: center; margin-bottom: 28px; }
+
+.brand-mark {
+  display: inline-flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.brand h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.brand p { margin: 0; color: var(--muted); }
+
+form label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+input, select, button {
+  font: inherit;
+}
+
+input, select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+input:focus, select:focus {
+  outline: 2px solid rgba(61, 139, 253, 0.45);
+  border-color: var(--accent);
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn:hover { filter: brightness(1.08); }
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), #5c9dff);
+  border-color: transparent;
+  color: white;
+  font-weight: 600;
+}
+
+.btn.ghost {
+  background: transparent;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.muted { color: var(--muted); font-size: 0.9rem; margin-left: 8px; }
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(61, 139, 253, 0.12);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.card h2 { margin: 0 0 12px; font-size: 1.15rem; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.result, .result-box {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  white-space: pre-wrap;
+  font-family: Consolas, monospace;
+  font-size: 0.88rem;
+}
+
+.oncall-card {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.oncall-card:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.error { color: var(--danger); margin-top: 10px; }
+.message { margin-top: 10px; }
+.message.ok { color: var(--success); }
+.message.err { color: var(--danger); }
+
+.table-wrap { overflow-x: auto; margin-top: 12px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+th { color: var(--muted); font-weight: 600; }
+
+code {
+  background: var(--panel-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+  .row { grid-template-columns: 1fr; }
+  .tabs { flex-direction: column; }
+}
