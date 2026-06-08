@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pet_proj_irp
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore
+        run: dotnet restore Pet-project.sln
+      - name: Build
+        run: dotnet build Pet-project.sln --no-restore
+      - name: Test
+        env:
+          ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Database=pet_proj_irp;Username=postgres;Password=postgres
+          ConnectionStrings__Redis: ""
+          RabbitMq__Enabled: "false"
+        run: dotnet test Pet-project.sln --no-build --verbosity normal

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRP Admin</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <section id="login-view" class="panel login-panel">
+      <div class="brand">
+        <div class="brand-mark">IRP</div>
+        <h1>Админ-панель</h1>
+        <p>Incident Response Platform</p>
+      </div>
+      <form id="login-form">
+        <label>
+          Email
+          <input type="email" id="login-email" required autocomplete="username" placeholder="admin@example.com">
+        </label>
+        <label>
+          Пароль
+          <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••">
+        </label>
+        <button type="submit" class="btn primary">Войти</button>
+        <p id="login-error" class="error hidden"></p>
+      </form>
+    </section>
+
+    <section id="dashboard-view" class="hidden">
+      <header class="topbar">
+        <div>
+          <strong>IRP Admin</strong>
+          <span id="user-info" class="muted"></span>
+        </div>
+        <button id="logout-btn" class="btn ghost">Выйти</button>
+      </header>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="status">Статус</button>
+        <button class="tab" data-tab="oncall">Дежурный</button>
+        <button class="tab" data-tab="users">Пользователи</button>
+      </nav>
+
+      <main>
+        <section id="tab-status" class="tab-panel active">
+          <div class="card">
+            <h2>Проверка API</h2>
+            <p class="muted">Эндпоинт <code>GET /api/v1/admin/ping</code></p>
+            <button id="ping-btn" class="btn primary">Проверить</button>
+            <pre id="ping-result" class="result"></pre>
+          </div>
+        </section>
+
+        <section id="tab-oncall" class="tab-panel">
+          <div class="card">
+            <h2>Текущие дежурные</h2>
+            <button id="refresh-oncall-btn" class="btn">Обновить</button>
+            <div id="oncall-current" class="result-box"></div>
+          </div>
+
+          <div class="card">
+            <h2>Назначить смену</h2>
+            <form id="shift-form">
+              <label>
+                Пользователь
+                <select id="shift-user" required></select>
+              </label>
+              <div class="row">
+                <label>
+                  Начало (UTC)
+                  <input type="datetime-local" id="shift-start" required>
+                </label>
+                <label>
+                  Конец (UTC)
+                  <input type="datetime-local" id="shift-end" required>
+                </label>
+              </div>
+              <label>
+                Заметка
+                <input type="text" id="shift-note" placeholder="Неделя on-call">
+              </label>
+              <button type="submit" class="btn primary">Создать смену</button>
+              <p id="shift-message" class="message hidden"></p>
+            </form>
+          </div>
+        </section>
+
+        <section id="tab-users" class="tab-panel">
+          <div class="card">
+            <h2>Создать пользователя</h2>
+            <form id="user-form">
+              <label>
+                Email
+                <input type="email" id="user-email" required>
+              </label>
+              <label>
+                Пароль
+                <input type="password" id="user-password" required minlength="6">
+              </label>
+              <label>
+                Имя
+                <input type="text" id="user-display" required>
+              </label>
+              <label>
+                Роль
+                <select id="user-role" required>
+                  <option value="oncall">oncall</option>
+                  <option value="admin">admin</option>
+                  <option value="user">user</option>
+                </select>
+              </label>
+              <label>
+                Telegram Chat ID
+                <input type="text" id="user-telegram" placeholder="123456789">
+              </label>
+              <button type="submit" class="btn primary">Создать</button>
+              <p id="user-message" class="message hidden"></p>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Список пользователей</h2>
+            <button id="refresh-users-btn" class="btn">Обновить</button>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Email</th>
+                    <th>Имя</th>
+                    <th>Роль</th>
+                    <th>Telegram</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

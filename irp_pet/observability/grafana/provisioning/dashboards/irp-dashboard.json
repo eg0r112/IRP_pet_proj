@@ -1,0 +1,219 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "Обзор API",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 1 },
+      "id": 1,
+      "targets": [
+        {
+          "expr": "sum(rate(http_server_request_duration_seconds_count{job=\"irp_pet\"}[5m]))",
+          "legendFormat": "HTTP req/s"
+        }
+      ],
+      "title": "HTTP Request Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 1 },
+      "id": 2,
+      "targets": [
+        { "expr": "irp_alerts_received_total", "legendFormat": "alerts" },
+        { "expr": "irp_incidents_created_total", "legendFormat": "incidents" }
+      ],
+      "title": "Алерты и инциденты",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 1 },
+      "id": 4,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket{job=\"irp_pet\"}[5m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ],
+      "title": "API Latency p95",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 8 },
+      "id": 101,
+      "title": "Уведомления — Telegram и Jira",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 9 },
+      "id": 10,
+      "targets": [
+        {
+          "expr": "sum by (channel, status) (irate(irp_channel_notifications_total[5m]))",
+          "legendFormat": "{{channel}} — {{status}}"
+        }
+      ],
+      "title": "Уведомления по каналам (rate)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 9 },
+      "id": 11,
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "targets": [
+        {
+          "expr": "sum(irp_channel_notifications_total{channel=\"telegram\",status=\"sent\"})",
+          "legendFormat": "TG sent"
+        },
+        {
+          "expr": "sum(irp_channel_notifications_total{channel=\"telegram\",status=\"failed\"})",
+          "legendFormat": "TG failed"
+        },
+        {
+          "expr": "sum(irp_channel_notifications_total{channel=\"telegram\",status=\"skipped\"})",
+          "legendFormat": "TG skipped"
+        }
+      ],
+      "title": "Telegram (всего)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 9 },
+      "id": 12,
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "targets": [
+        {
+          "expr": "sum(irp_channel_notifications_total{channel=\"jira\",status=\"sent\"})",
+          "legendFormat": "Jira sent"
+        },
+        {
+          "expr": "sum(irp_channel_notifications_total{channel=\"jira\",status=\"failed\"})",
+          "legendFormat": "Jira failed"
+        },
+        {
+          "expr": "sum(irp_channel_notifications_total{channel=\"jira\",status=\"skipped\"})",
+          "legendFormat": "Jira skipped"
+        }
+      ],
+      "title": "Jira (всего)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 17 },
+      "id": 102,
+      "title": "RabbitMQ и Outbox",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
+      "id": 20,
+      "targets": [
+        {
+          "expr": "sum by (event_type) (irate(irp_rabbitmq_published_total[5m]))",
+          "legendFormat": "published {{event_type}}"
+        },
+        {
+          "expr": "sum by (event_type) (irate(irp_rabbitmq_consumed_total[5m]))",
+          "legendFormat": "consumed {{event_type}}"
+        }
+      ],
+      "title": "IRP → RabbitMQ (publish / consume)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
+      "id": 21,
+      "targets": [
+        {
+          "expr": "sum by (event_type) (irate(irp_outbox_processed_total[5m]))",
+          "legendFormat": "outbox {{event_type}}"
+        },
+        {
+          "expr": "irate(irp_rabbitmq_publish_failed_total[5m])",
+          "legendFormat": "publish errors"
+        }
+      ],
+      "title": "Outbox обработка",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 26 },
+      "id": 22,
+      "targets": [
+        {
+          "expr": "rabbitmq_queue_messages",
+          "legendFormat": "{{queue}}"
+        }
+      ],
+      "title": "RabbitMQ: сообщений в очередях",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 26 },
+      "id": 23,
+      "targets": [
+        {
+          "expr": "rabbitmq_connections",
+          "legendFormat": "connections"
+        },
+        {
+          "expr": "rabbitmq_channels",
+          "legendFormat": "channels"
+        }
+      ],
+      "title": "RabbitMQ: соединения",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 26 },
+      "id": 24,
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "targets": [
+        {
+          "expr": "sum(irp_rabbitmq_published_total)",
+          "legendFormat": "published"
+        },
+        {
+          "expr": "sum(irp_rabbitmq_consumed_total)",
+          "legendFormat": "consumed"
+        },
+        {
+          "expr": "irp_rabbitmq_publish_failed_total",
+          "legendFormat": "failed"
+        }
+      ],
+      "title": "RabbitMQ IRP (всего)",
+      "type": "stat"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["irp", "rabbitmq", "notifications", "jira"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "IRP Platform",
+  "uid": "irp-platform",
+  "version": 2
+}
